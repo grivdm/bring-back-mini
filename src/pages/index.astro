@@ -1,24 +1,126 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Phone from '../components/Phone.astro';
+import { mini, comparisons, scaledSize, sizeDifference } from '../lib/devices';
+const selected = comparisons[0];
+const difference = sizeDifference(selected);
+const miniSize = scaledSize(mini);
 ---
-
 <Layout>
-  <div class="mx-auto flex min-h-svh max-w-7xl flex-col px-6 sm:px-12">
-    <header class="flex items-center justify-between gap-4 py-7">
-      <a class="text-lg font-semibold tracking-tight" href={import.meta.env.BASE_URL} aria-label="Bring Back Mini home">Bring Back Mini<span class="text-accent">.</span></a>
-      <span class="text-xs text-muted sm:text-sm">An independent fan project</span>
-    </header>
-
-    <main class="flex flex-1 flex-col items-center justify-center py-20 text-center">
-      <p class="mb-8 text-xs font-semibold tracking-[0.18em] text-muted uppercase">A little phone worth loving</p>
-      <h1 class="text-[clamp(3.5rem,12vw,8rem)] leading-[0.96] font-semibold tracking-[-0.065em]">
-        Small phone.<br /><span class="text-accent">Big love.</span>
-      </h1>
-      <p class="mt-8 max-w-md text-lg leading-relaxed text-muted sm:text-xl">Not everyone wants a bigger iPhone.</p>
-    </main>
-
-    <footer class="border-t border-ink/10 py-6 text-center text-xs leading-relaxed text-muted sm:text-left">
-      Made by people who miss small phones. Not affiliated with Apple.
-    </footer>
-  </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header wrap">
+    <a class="wordmark" href={import.meta.env.BASE_URL} aria-label="Bring Back Mini home">bring back mini<span>✳</span></a>
+    <nav aria-label="Main navigation">
+      <a href="#why-mini" class="desktop-link">Why mini?</a>
+      <a href="#compare">Compare sizes <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="little-dot"></span> A little phone worth loving</p>
+        <h1 id="hero-title">Small phone.<br /><span>Big love.</span></h1>
+        <p class="hero-description">Not everyone wants a bigger iPhone.<br />Some of us just want our mini back.</p>
+        <a class="button" href="#compare">See the difference <span aria-hidden="true">↗</span></a>
+        <p class="hero-footnote">A small tribute. A big wish.</p>
+      </div>
+      <figure class="hero-art">
+        <span class="art-word" aria-hidden="true">mini</span>
+        <Phone class="hero-phone" />
+        <div class="art-note" aria-hidden="true">less phone.<br />more life. <span>↖</span></div>
+        <figcaption>iPhone 13 mini <span>Small by design. Loved for it.</span></figcaption>
+      </figure>
+      <div class="hero-bottom"><span>For the love of small phones.</span><a href="#why-mini">A little perspective <span aria-hidden="true">↓</span></a></div>
+    </section>
+    <section id="why-mini" class="reasons wrap" aria-labelledby="reasons-title">
+      <div class="section-heading"><p class="eyebrow">01 / The little things</p><h2 id="reasons-title">Fits your life.<br /><span>And your pocket.</span></h2></div>
+      <div class="reason-list">
+        <article><span class="reason-number">01</span><h3>One hand. All yours.</h3><p>A narrower phone puts more of the screen within reach. Keep the other hand for your coffee.</p></article>
+        <article><span class="reason-number">02</span><h3>Room for everything else.</h3><p>Less phone in your pocket. More room to move. A little less to carry around.</p></article>
+        <article><span class="reason-number">03</span><h3>A little lighter.</h3><p>At 140 grams, the iPhone 13 mini keeps things light. Small is a feature worth keeping.</p></article>
+      </div>
+    </section>
+    <section id="compare" class="comparison-section" aria-labelledby="compare-title">
+      <div class="wrap comparison-layout">
+        <div class="comparison-copy">
+          <p class="eyebrow">02 / A matter of size</p>
+          <h2 id="compare-title">A little makes<br /><span>a big difference.</span></h2>
+          <p>Same scale. Side by side.<br />See how much phone you actually want.</p>
+          <label for="comparison-model">Compare the mini with</label>
+          <select id="comparison-model">{comparisons.map((device, index) => <option value={index}>{device.name}</option>)}</select>
+          <div class="difference" aria-live="polite" aria-atomic="true">
+            <p><strong><span id="narrower">{difference.narrower}</span><small> mm</small></strong><span>narrower</span></p>
+            <p><strong><span id="lighter">{difference.lighter}</span><small> g</small></strong><span>lighter</span></p>
+            <span class="sr-only">The iPhone 13 mini compared with <span id="difference-model">{selected.name}</span>.</span>
+          </div>
+          <p class="scale-note">Body dimensions shown at a shared scale.<br />Not actual size on your screen. Illustrative silhouettes.</p>
+          <noscript><p>Enable JavaScript to switch models. Currently comparing with iPhone 16.</p></noscript>
+        </div>
+        <div class="comparison-visual">
+          <div class="device-pair" role="img" aria-label={`Body size comparison: iPhone 13 mini, 131.5 by 64.2 mm, and ${selected.name}, ${selected.height} by ${selected.width} mm.`}>
+            <div class="device-column"><div class="device-canvas"><div class="silhouette mini-silhouette" style={`width:${miniSize.width}%;height:${miniSize.height}%`}><span class="mini-notch"></span><span class="silhouette-name">mini<span>♡</span></span></div></div></div>
+            <div class="device-column"><div class="device-canvas"><div id="other-silhouette" class="silhouette other-silhouette" style={`width:${scaledSize(selected).width}%;height:${scaledSize(selected).height}%`}><span class="island"></span><span class="silhouette-name" id="silhouette-label">16</span></div></div></div>
+          </div>
+          <div class="device-labels">
+            <div><h3>iPhone 13 mini</h3><p>131.5 × 64.2 mm · 140 g</p><a href={mini.source}>Apple specifications ↗</a></div>
+            <div><h3 id="other-name">{selected.name}</h3><p id="other-dimensions">{selected.height} × {selected.width} mm · {selected.weight} g</p><a id="other-source" href={selected.source}>Apple specifications ↗</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="share-section wrap" aria-labelledby="share-title">
+      <span class="share-asterisk" aria-hidden="true">✳</span>
+      <p class="eyebrow">Small phones. Strong feelings.</p>
+      <h2 id="share-title">Miss the mini?<br /><span>You’re in good company.</span></h2>
+      <p>Send this to someone who gets it.</p>
+      <button class="button" id="share-button" type="button" hidden>Share the mini love <span aria-hidden="true">↗</span></button>
+      <a class="share-email" href="mailto:?subject=Bring%20Back%20Mini&body=Small%20phone.%20Big%20love.%20https%3A%2F%2Fgrivdm.github.io%2Fbring-back-mini%2F">Share by email</a>
+      <p id="share-status" role="status"></p>
+      <div id="share-fallback" hidden><label for="share-url">Copy this link to share</label><input id="share-url" type="url" readonly value="https://grivdm.github.io/bring-back-mini/" /></div>
+    </section>
+  </main>
+  <footer class="site-footer wrap"><a class="wordmark" href={import.meta.env.BASE_URL}>bring back mini<span>✳</span></a><p>An independent, noncommercial fan project.<br />Not affiliated with or endorsed by Apple. iPhone is a trademark of Apple.</p><a href="#main">Back to top ↑</a></footer>
 </Layout>
+<script>
+  import { comparisons, scaledSize, sizeDifference } from '../lib/devices';
+  const select = document.querySelector<HTMLSelectElement>('#comparison-model')!;
+  select.addEventListener('change', () => {
+    const device = comparisons[Number(select.value)];
+    if (!device) return;
+    const size = scaledSize(device);
+    const silhouette = document.querySelector<HTMLElement>('#other-silhouette')!;
+    silhouette.style.width = `${size.width}%`;
+    silhouette.style.height = `${size.height}%`;
+    const difference = sizeDifference(device);
+    const values = { 'other-name': device.name, 'other-dimensions': `${device.height} × ${device.width} mm · ${device.weight} g`, narrower: difference.narrower, lighter: String(difference.lighter), 'difference-model': device.name, 'silhouette-label': device.name.replace('iPhone ', '') };
+    for (const [id, text] of Object.entries(values)) document.getElementById(id)!.textContent = text;
+    document.querySelector<HTMLAnchorElement>('#other-source')!.href = device.source;
+    document.querySelector('.device-pair')!.setAttribute('aria-label', `Body size comparison: iPhone 13 mini, 131.5 by 64.2 mm, and ${device.name}, ${device.height} by ${device.width} mm.`);
+  });
+  const shareButton = document.querySelector<HTMLButtonElement>('#share-button')!;
+  const status = document.querySelector<HTMLElement>('#share-status')!;
+  const url = 'https://grivdm.github.io/bring-back-mini/';
+  shareButton.hidden = false;
+  shareButton.addEventListener('click', async () => {
+    status.textContent = '';
+    document.getElementById('share-fallback')!.hidden = false;
+    shareButton.disabled = true;
+    // Some embedded browsers leave share/clipboard promises pending. Keep a manual escape hatch.
+    const unlock = window.setTimeout(() => { shareButton.disabled = false; }, 10000);
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Bring Back Mini', text: 'Small phone. Big love.', url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        status.textContent = 'Link copied. A little love goes a long way.';
+      }
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        status.textContent = 'Couldn’t share automatically. You can copy the link below.';
+        document.getElementById('share-fallback')!.hidden = false;
+        const input = document.querySelector<HTMLInputElement>('#share-url')!;
+        input.focus(); input.select();
+      }
+    } finally { window.clearTimeout(unlock); shareButton.disabled = false; }
+  });
+</script>
